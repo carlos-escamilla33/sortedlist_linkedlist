@@ -4,7 +4,9 @@
 
 template<class T>
 SortedList<T>::SortedList() {
-
+    length = 0;
+    head = nullptr;
+    iterNode = nullptr;
 }
 
 template<class T>
@@ -24,12 +26,54 @@ int SortedList<T>::GetLength() const {
 
 template<class T>
 bool SortedList<T>::Contains(T someItem) {
+    NodeT *currN = head;
+
+    while (currN != nullptr) {
+        if (currN->info == someItem) {
+            return true;
+        } else if (currN->info > someItem) {
+            break;
+        }
+        currN = currN->next;
+    }
+
     return false;
 }
 
 template<class T>
-void SortedList<T>::PutItem(T item) {
+void SortedList<T>::AddItem(T item) {
+    NodeT* node = new NodeT;
+    node->info = item;
+    node->next = nullptr;
 
+    if (head == nullptr) {
+        head = node;
+        length ++;
+        return;
+    }
+
+    NodeT *currN = head;
+    NodeT *prevN = nullptr;
+
+    while (currN != nullptr) {
+
+        if (currN->info > item) {
+           node->next = currN;
+            if (prevN != nullptr) {
+                prevN->next = node;
+            } else {
+                head = node;
+            }
+            prevN->next = node;
+            length ++;
+            break;
+        }
+        prevN = currN;
+        currN = currN->next;
+    }
+
+    prevN->next = node;
+    length ++;
 }
 
 template<class T>
